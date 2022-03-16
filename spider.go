@@ -13,6 +13,7 @@ import (
     "math"
     "os"
     "github.com/PuerkitoBio/goquery"
+    "log"
 )
 
 const (
@@ -47,13 +48,13 @@ type UserListResponse struct {
 func getUserList(page int) (*UserList, error) {
     resp, err := http.Get(fmt.Sprintf(apiUserList, page))
     if err != nil {
-        fmt.Println(err)
+        log.Println(err)
         return nil, err
     }
 
     buf, err := ioutil.ReadAll(resp.Body)
     if err != nil {
-        fmt.Println(err)
+        log.Println(err)
         return nil, err
     }
 
@@ -135,14 +136,14 @@ type VideoInfo struct {
 func getVideoInfo(uid int) (*VideoInfo, error) {
     resp, err := http.Get(fmt.Sprintf(apiVideoInfo, uid))
     if err != nil {
-        fmt.Println(err)
+        log.Println(err)
         return nil, err
     }
 
     m := make(map[string]interface{})
     buf, err := ioutil.ReadAll(resp.Body)
     if err != nil {
-        fmt.Println(err)
+        log.Println(err)
         return nil, err
     }
 
@@ -166,13 +167,13 @@ const VIDEOPAGESIZE = 15
 func getVideoList(uid, p int, path string) error {
     resp, err := http.Get(fmt.Sprintf(apiVideoList, uid, p))
     if err != nil {
-        fmt.Println(err)
+        log.Println(err)
         return err
     }
 
     doc, err := goquery.NewDocumentFromReader(resp.Body)
     if err != nil {
-        fmt.Println(err)
+        log.Println(err)
         return err
     }
 
@@ -191,13 +192,13 @@ func fetchVideo(href string, out string) error {
     fmt.Println(fmt.Sprintf(apiVideo, href))
     resp, err := http.Get(fmt.Sprintf(apiVideo, href))
     if err != nil {
-        fmt.Println(err)
+        log.Println(err)
         return err
     }
 
     doc, err := goquery.NewDocumentFromReader(resp.Body)
     if err != nil {
-        fmt.Println(err)
+        log.Println(err)
         return err
     }
 
@@ -215,7 +216,7 @@ func fetchVideo(href string, out string) error {
 func fetchAllVideo(uid int, path string) {
     info, err := getVideoInfo(uid)
     if err != nil {
-        fmt.Println(err)
+        log.Println(err)
         return
     }
     fmt.Printf("uid:%d sum:%d\n", info.Uid, info.Sum)
